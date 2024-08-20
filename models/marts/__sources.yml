@@ -1,0 +1,10 @@
+version: 2
+
+sources:
+  - name: taxi
+    database: dwh  
+    schema: dbo  
+    tables:
+      - name: Trip
+      - name: HackneyLicense
+      - name: Medallion
