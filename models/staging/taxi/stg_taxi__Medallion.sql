@@ -15,8 +15,8 @@ source as (
 renamed as (
 
     select
-        MedallionID,
-        MedallionBKey
+        MedallionID as medallion_id,
+        MedallionBKey as medallion_bkey
     from source
 
 )
