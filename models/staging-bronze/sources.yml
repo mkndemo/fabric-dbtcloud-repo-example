@@ -1,0 +1,7 @@
+version: 2
+sources:
+  - name: bronze_lakehouse
+    schema: dbo
+    database: raw_bronze_lakehouse
+    tables:
+      - name: raw_customers
