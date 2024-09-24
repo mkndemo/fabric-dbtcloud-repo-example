@@ -21,7 +21,7 @@ models:
     staging:
       +materialized: table
       #schema: analytics
-      database: dwh
+      database: dwh_bronze
     intermediate-silver:
       +materialized: table
       #schema: analytics
