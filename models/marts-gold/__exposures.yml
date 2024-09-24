@@ -2,11 +2,11 @@ version: 2
 
 exposures:
 
-  - name: Dashboard OrdersByMonth
-    label: Dashboard OrdersByMonth
+  - name: Dashboard BP
+    label: Dashboard BP
     type: dashboard
     maturity: high
-    url: https://app.fabric.microsoft.com/reportEmbed?reportId=2c5f7ad5-910e-4b26-9309-d76d7daed6f0&autoAuth=true&ctid=2278b8e2-3164-4501-b0fc-1ed95527b916
+    url: https://app.fabric.microsoft.com/groups/4bf19b23-714e-4ca0-a64c-987dd8fa4075/reports/8fea6f1b-5977-439d-9582-859ce8e960e0/1b32508a8d5c1bb5f816?experience=data-warehouse
     description: Dashboard to displays Orders by month
 
     depends_on:
