@@ -1,0 +1,18 @@
+version: 2
+
+exposures:
+
+  - name: Dashboard OrdersByMonth
+    label: Dashboard OrdersByMonth
+    type: dashboard
+    maturity: high
+    url: https://app.fabric.microsoft.com/reportEmbed?reportId=2c5f7ad5-910e-4b26-9309-d76d7daed6f0&autoAuth=true&ctid=2278b8e2-3164-4501-b0fc-1ed95527b916
+    description: Dashboard to displays Orders by month
+
+    depends_on:
+      - ref('orders')
+      - ref('customers')
+
+    owner:
+      name: Max Knutsson
+      email: data@jaffleshop.com
