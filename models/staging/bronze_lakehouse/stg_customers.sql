@@ -1,3 +1,9 @@
+{{
+    config(
+        materialized='view'
+    )
+}}
+
 with
 
 source as (
@@ -11,7 +17,7 @@ renamed as (
     select
 
         ----------  ids
-        id as customer_id,
+        id as customerid,
         ---------- text
         name as customer_name
 
