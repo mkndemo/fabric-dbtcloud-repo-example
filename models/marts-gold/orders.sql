@@ -55,6 +55,7 @@ compute_booleans as (
     from orders
 
     left join
+    
         order_items_summary
         on orders.order_id = order_items_summary.order_id
 
