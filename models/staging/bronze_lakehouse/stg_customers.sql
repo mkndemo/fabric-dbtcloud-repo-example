@@ -12,7 +12,6 @@ renamed as (
 
         ----------  ids
         id as customer_id,
-        2 as id2,
         ---------- text
         name as customer_name
 
