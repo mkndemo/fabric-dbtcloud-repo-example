@@ -31,7 +31,7 @@ joined as (
         products.product_name,
         products.product_price,
         products.is_food_item,
-        products.is_drink_item,
+        products.is_drink_item_2,
         order_supplies_summary.supply_cost
     from order_items
     left join orders on order_items.order_id = orders.order_id
