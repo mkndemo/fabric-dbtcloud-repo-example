@@ -1,0 +1,11 @@
+version: 2
+
+sources:
+  - name: source_tables
+    database: raw_bronze_lakehouse
+    schema: dbo
+    tables:
+      - name: source1
+      - name: source2
+      - name: source3
+      - name: source4
