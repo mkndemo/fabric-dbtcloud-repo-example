@@ -14,7 +14,14 @@ renamed as (
         CAST(PK as INTEGER) as pk,
         Column_2,
         Column_4,
-        updated_at
+        updated_at,
+        CONVERT(varchar(32), HASHBYTES('MD5', 
+            CONCAT_WS('|', 
+                CAST(PK as varchar(MAX)),
+                CAST(Column_2 AS VARCHAR(MAX)),
+                CAST(Column_4 AS VARCHAR(MAX))
+            )
+        ), 2) AS hash
     from source
 
 )
