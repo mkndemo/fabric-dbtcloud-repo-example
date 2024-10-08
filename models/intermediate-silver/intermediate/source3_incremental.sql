@@ -1,14 +1,13 @@
 {{ config(
     materialized='incremental',
-    unique_key='hash',
-    incremental_strategy='merge',
-    on_schema_change='sync_all_columns'
+    unique_key='hash'
 ) }}
 
 SELECT
     pk,
     Column_2,
     Column_4,
+    hash,
     '{{ invocation_id }}' as batch_id
 FROM {{ ref('stg_source_tables__source3') }} s
 
