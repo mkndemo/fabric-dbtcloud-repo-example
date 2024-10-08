@@ -1,27 +1,20 @@
--- merge strategy and ability to only update specific Columns https://docs.getdbt.com/docs/build/incremental-strategy
 {{ config(
     materialized='incremental',
     unique_key='pk',
     incremental_strategy='merge',
-    on_schema_change='sync_all_Columns',
-    constraints={
-        'primary_key': 'pk'
-    },
-    cluster_by=['pk']
+    on_schema_change='sync_all_columns'
 ) }}
 
--- create a variable to reuse for the when to update logic for this CTE
 {% if is_incremental() %}
     WITH max_updated_at AS (
         SELECT MAX(updated_at) AS max_updated_at FROM {{ this }}
     ),
 {% else %}
     WITH max_updated_at AS (
-        SELECT TO_TIMESTAMP('1900-01-01 00:00:00') AS max_updated_at
+        SELECT CAST('1900-01-01 00:00:00' AS DATETIME2) AS max_updated_at
     ),
 {% endif %}
 
--- CTEs to identify changed PKs in each source
 changed_source1 AS (
     SELECT pk
     FROM {{ ref('source1_incremental') }} s1
@@ -47,7 +40,6 @@ changed_source4 AS (
     WHERE s4.updated_at > max_updated_at.max_updated_at
 ),
 
--- Union all changed PKs
 changed_PKs AS (
     SELECT pk FROM changed_source1
     UNION
@@ -58,10 +50,9 @@ changed_PKs AS (
     SELECT pk FROM changed_source4
 ),
 
--- Base data combining all sources
 combined_data AS (
     SELECT
-        s1.PK,
+        s1.pk,
         s1.Column_1,
         COALESCE(s3.Column_2, s1.Column_2) AS Column_2,
         COALESCE(s2.Column_3, s1.Column_3) AS Column_3,
@@ -263,19 +254,22 @@ combined_data AS (
         s1.Column_198,
         s1.Column_199,
         COALESCE(s4.Column_200, s1.Column_200) AS Column_200,
-        GREATEST(
-            s1.updated_at,
-            COALESCE(s2.updated_at, TO_TIMESTAMP('1900-01-01 00:00:00')),
-            COALESCE(s3.updated_at, TO_TIMESTAMP('1900-01-01 00:00:00')),
-            COALESCE(s4.updated_at, TO_TIMESTAMP('1900-01-01 00:00:00'))
+        (
+            SELECT MAX(v.updated_at)
+            FROM (VALUES 
+                (s1.updated_at), 
+                (s2.updated_at), 
+                (s3.updated_at), 
+                (s4.updated_at)
+            ) AS v(updated_at)
         ) AS updated_at,
         '{{ invocation_id }}' as batch_id
     FROM {{ ref('source1_incremental') }} s1
-    LEFT JOIN {{ ref('source2_incremental') }} s2 ON s1.PK = s2.PK
-    LEFT JOIN {{ ref('source3_incremental') }} s3 ON s1.PK = s3.PK
-    LEFT JOIN {{ ref('source4_incremental') }} s4 ON s1.PK = s4.PK
+    LEFT JOIN {{ ref('source2_incremental') }} s2 ON s1.pk = s2.pk
+    LEFT JOIN {{ ref('source3_incremental') }} s3 ON s1.pk = s3.pk
+    LEFT JOIN {{ ref('source4_incremental') }} s4 ON s1.pk = s4.pk
     {% if is_incremental() %}
-    WHERE s1.PK IN (SELECT PK FROM changed_PKs)
+    WHERE s1.pk IN (SELECT pk FROM changed_PKs)
     {% endif %}
 )
 
